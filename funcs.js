@@ -15,18 +15,49 @@ function d(i) {
   return document.getElementById(i);
 }
 
+function loopject(o,doo) {
+  for (var key in o) {
+    if (o.hasOwnProperty(key)) {
+        doo(key,o[key])
+    }
+}
+}
+
 d('t').innerHTML = d('t').innerHTML.trim() + '\n\n';
 
 function filer(dox) {
   d('f').addEventListener('change', function () {
     var files = d('f').files;
+    var files_text = {};
+    var files_image = {};
     for (var i = 0; i < files.length; i++) {
-      var reader = new FileReader();
-      reader.readAsText(files[i], 'UTF-8');
-      reader.onload = function (evt) {
-        dox(evt.target.result);
-      };
+     
+      if (/text/.test(files[i].type)) {
+          var fname = files[i].name.replace(/\.[^/.]+$/, "")  
+        
+          files_text[fname] = files[i]
+      }
+
+      if (/image/.test(files[i].type)) {
+        var fname = files[i].name.replace(/\.[^/.]+$/, "")  
+       
+        files_image[fname] = files[i]
+      }
+
+
     }
+
+
+
+
+    loopject(files_text,(k,val)=>{
+        if (typeof files_image[k] != 'undefined') {
+          dox(files_text[k],files_image[k]);
+        }
+    });
+
+
+
   });
 }
 
@@ -156,13 +187,14 @@ function frame3(inp) {
         canvasTxt.vAlign = 'top';
         canvasTxt.fontWeight = ''
         canvasTxt.justify = true;
+        canvasTxt.lineHeight = ''
         canvasTxt.drawText(
           ctx,
           $(me.texts[x]).val(),
-          inp.width * 0.02,
+          inp.width * 0.04,
           parseInt(me.poses[x].value) +
             parseInt($(me.textsizes[x]).val()),
-          inp.width - inp.width * 0.05,
+          inp.width - inp.width * 0.08,
           sections
         );
       }
@@ -229,7 +261,7 @@ function gencover(inp) {
   canvasTxt.align = 'center';
   canvasTxt.vAlign = 'middle';
   canvasTxt.justify = true;
-  canvasTxt.fontWeight = 'bold';
+  canvasTxt.fontWeight = '';
   canvasTxt.strokeStyle = 'red';
 
   canvasTxt.lineHeight = parseInt((canv.height * 0.4) / 3) * 1.5;
@@ -271,7 +303,7 @@ ctx.globalAlpha = 0;
   ctx.globalAlpha = 0.7;
   ctx.fillStyle = 'yellow';
 
- ctx.fillRect(0, globyy[0]-globhh[0],inp.width,globyy[globyy.length-1]-globhh[globhh.length-1]);
+ ctx.fillRect(0, globyy[0]-globhh[0],inp.width,/*globyy[globyy.length-1]-globhh[globhh.length-1]*/ 500 );
   globyy = [];
   globhh = [];
   ctx.globalAlpha = 1;
@@ -294,7 +326,7 @@ ctx.globalAlpha = 0;
   ctx.fillStyle = 'white';
   var canvasTxt2 = window.canvasTxt.default;
   canvasTxt2.font = inp.font2
-  canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 3);
+  canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 6);
   canvasTxt2.align = 'center';
   canvasTxt2.vAlign = 'bottom';
   canvasTxt2.justify = true;
@@ -439,9 +471,12 @@ function fal(inp) {
   var faltitle = singlefal[0];
 
 
-  covccont.append(
-    gencover({font2:inp.tagfont,font:inp.titlefont,title:faltitle.title + '\n' + faltitle.text.join('\n')+"",width:inp.width,height:inp.height,img:inp.img}).elem
-  );
+
+    covccont.append(
+      gencover({font2:inp.tagfont,font:inp.titlefont,title:faltitle.title + '\n' + faltitle.text.join('\n')+"",width:inp.width,height:inp.height,img:inp.img}).elem
+    );
+
+
 
   singlefal.splice(0, 1);
 
@@ -455,7 +490,7 @@ function fal(inp) {
     ccont.append($(e.elem));
     var controler = $('<div></div>');
 
-    controler.hide();
+   // controler.hide();
 
     e.titles.forEach((t, i) => {
       controler.append($(e.textsizes[i]));
