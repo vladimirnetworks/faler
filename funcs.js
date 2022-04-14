@@ -70,6 +70,7 @@ function filer(dox) {
 }
 
 function gen(val) {
+  val = val.replaceAll("\r","")
   const regexpSize = /^(.*?)\n(.*?)\n\n/gms;
   var vals = [];
 
@@ -123,6 +124,7 @@ function frame3(inp) {
     var posval = document.createElement('input');
     posval.type = 'range';
     posval.min = 0;
+    posval.style.width="100%"
     posval.max = inp.height;
     posval.value = pos;
     xgen(posval);
@@ -141,6 +143,7 @@ function frame3(inp) {
 
     var textsize = document.createElement('input');
     textsize.type = 'range';
+    textsize.style.width="100%"
     textsize.min = 0;
     textsize.max = inp.height;
     textsize.value = inp.textfontsize;
