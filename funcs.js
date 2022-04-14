@@ -23,13 +23,14 @@ function loopject(o,doo) {
 }
 }
 
-d('t').innerHTML = d('t').innerHTML.trim() + '\n\n';
+
 
 function filer(dox) {
   d('f').addEventListener('change', function () {
     var files = d('f').files;
     var files_text = {};
     var files_image = {};
+    var files_audio = {};
     for (var i = 0; i < files.length; i++) {
      
       if (/text/.test(files[i].type)) {
@@ -45,6 +46,13 @@ function filer(dox) {
       }
 
 
+
+      if (/.mp3/.test(files[i].name)) {
+        var fname = files[i].name.replace(/\.[^/.]+$/, "")    
+        files_audio[fname] = files[i]
+      }
+
+
     }
 
 
@@ -52,7 +60,7 @@ function filer(dox) {
 
     loopject(files_text,(k,val)=>{
         if (typeof files_image[k] != 'undefined') {
-          dox(files_text[k],files_image[k]);
+          dox(files_text[k],files_image[k],files_audio[k]);
         }
     });
 
@@ -420,14 +428,26 @@ function render(inp) {
     vid.src = URL.createObjectURL(blob);
     vid.controls = true;
     const a = document.createElement('a');
-    a.download = 'myvid.webm';
+    a.download = 'myvid.mp4';
     a.href = vid.src;
     a.textContent = 'download';
     dlx.append($(a));
   };
 
-  const stream = canv.captureStream();
-  const rec = new MediaRecorder(stream);
+  /*audio*/
+//  inp.audio.crossOrigin = 'anonymous';
+
+  var actx = new AudioContext();
+  var dest = actx.createMediaStreamDestination();
+  var sourceNode = actx.createMediaElementSource(inp.audioelem);
+  sourceNode.connect(dest);
+  sourceNode.connect(actx.destination);
+  var audioTrack = dest.stream.getAudioTracks()[0];
+  inp.audioelem.play();
+  /**/
+  var stream = canv.captureStream();
+  stream.addTrack(audioTrack)
+  var rec = new MediaRecorder(stream);
 
   const chunks = [];
   rec.ondataavailable = (e) => {
@@ -437,12 +457,12 @@ function render(inp) {
 
   rec.onstop = (e) => {
     
-    exportVid(new Blob(chunks, { type: 'video/webm' }))};
+    exportVid(new Blob(chunks, { type: 'video/mp4' }))};
 
  
   setTimeout(() => {  rec.start();}, 100);
 
-  setTimeout(() => rec.stop(), 59000);
+  setTimeout(() => { rec.stop();inp.audioelem.pause(); } ,/* 59000 */ 59000);
 
   return dlx;
 }
@@ -465,7 +485,15 @@ function fal(inp) {
     '<div style="display:inline-block;margin-left:2rem;width:300px;vertical-align: top;"></div>'
   );
 
+  var aucont = $('<div style="display:inline-block;margin-left:2rem;width:300px;vertical-align: top;"></div>');
+
+  aucont.append(inp.audioelem);
+  thisfal.append(aucont);
+
   thisfal.append(covccont);
+
+
+
 
   var singlefal = gen(inp.text);
   var faltitle = singlefal[0];
@@ -512,7 +540,7 @@ function fal(inp) {
 
   thisfal.append(
     $('<button>gen</button>').click(() => {
-      thisfal.append(render({allframes:alfalsframe,width:inp.width,height:inp.height}));
+      thisfal.append(render({audioelem:inp.audioelem,allframes:alfalsframe,width:inp.width,height:inp.height}));
     })
   );
 
