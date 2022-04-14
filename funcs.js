@@ -428,7 +428,7 @@ function render(inp) {
     vid.src = URL.createObjectURL(blob);
     vid.controls = true;
     const a = document.createElement('a');
-    a.download = 'myvid.mp4';
+    a.download = 'myvid.'+$("#ft").val();
     a.href = vid.src;
     a.textContent = 'download';
     dlx.append($(a));
@@ -447,7 +447,10 @@ function render(inp) {
   /**/
   var stream = canv.captureStream();
   stream.addTrack(audioTrack)
-  var rec = new MediaRecorder(stream);
+  var rec = new MediaRecorder(stream,{
+    audioBitsPerSecond: parseInt($("#abr").val()), // 128 kbit/s
+    videoBitsPerSecond: parseInt($("#vbr").val()), // 2 Mbit/s
+  });
 
   const chunks = [];
   rec.ondataavailable = (e) => {
@@ -457,9 +460,8 @@ function render(inp) {
 
   rec.onstop = (e) => {
     
-    exportVid(new Blob(chunks, { type: 'video/mp4' }))};
+     exportVid(new Blob(chunks, { type: 'video/'+$("#ft").val() }))};
 
- 
   setTimeout(() => {  rec.start();}, 100);
 
   setTimeout(() => { rec.stop();inp.audioelem.pause(); } ,/* 59000 */ 59000);
