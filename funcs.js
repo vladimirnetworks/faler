@@ -451,6 +451,7 @@ function render(inp) {
   var stream = canv.captureStream();
   stream.addTrack(audioTrack)
   var rec = new MediaRecorder(stream,{
+    mimeType: 'video/webm;codecs=h264',
     audioBitsPerSecond: parseInt($("#abr").val()), // 128 kbit/s
     videoBitsPerSecond: parseInt($("#vbr").val()), // 2 Mbit/s
   });
