@@ -15,15 +15,13 @@ function d(i) {
   return document.getElementById(i);
 }
 
-function loopject(o,doo) {
+function loopject(o, doo) {
   for (var key in o) {
     if (o.hasOwnProperty(key)) {
-        doo(key,o[key])
+      doo(key, o[key]);
     }
+  }
 }
-}
-
-
 
 function filer(dox) {
   d('f').addEventListener('change', function () {
@@ -32,50 +30,70 @@ function filer(dox) {
     var files_image = {};
     var files_audio = {};
     for (var i = 0; i < files.length; i++) {
-     
       if (/text/.test(files[i].type)) {
-          var fname = files[i].name.replace(/\.[^/.]+$/, "")  
-        
-          files_text[fname] = files[i]
+        var fname = files[i].name.replace(/\.[^/.]+$/, '');
+
+        files_text[fname] = files[i];
       }
 
       if (/image/.test(files[i].type)) {
-        var fname = files[i].name.replace(/\.[^/.]+$/, "")  
-       
-        files_image[fname] = files[i]
+        var fname = files[i].name.replace(/\.[^/.]+$/, '');
+
+        files_image[fname] = files[i];
       }
-
-
 
       if (/.mp3/.test(files[i].name)) {
-        var fname = files[i].name.replace(/\.[^/.]+$/, "")    
-        files_audio[fname] = files[i]
+        var fname = files[i].name.replace(/\.[^/.]+$/, '');
+        files_audio[fname] = files[i];
       }
-
-
     }
 
-
-
-
-    loopject(files_text,(k,val)=>{
-        if (typeof files_image[k] != 'undefined') {
-          dox(files_text[k],files_image[k],files_audio[k]);
-        }
+    loopject(files_text, (k, val) => {
+      if (typeof files_image[k] != 'undefined') {
+        dox(files_text[k], files_image[k], files_audio[k]);
+      }
     });
-
-
-
   });
 }
 
-function gen(val) {
-  val = val.replaceAll("\r","")
+function gen_old(val) {
+  val = val.replaceAll('\r', '');
   const regexpSize = /^(.*?)\n(.*?)\n\n/gms;
   var vals = [];
 
   val.match(regexpSize).forEach((v) => {
     var xpl = v.trim().split('\n');
+    var title = xpl[0];
+    var more = [];
+    xpl.forEach((vv, i) => {
+      if (i > 0) {
+        more.push(vv);
+      }
+    });
+
+    vals.push({
+      title: title,
+      text: more,
+    });
+  });
+
+  return vals;
+}
+
+function gen(val) {
+  val = val.replaceAll('\r', '');
+  var vals = [];
+  var xval = val.trim();
+  let res = xval.replace(/^\s+/gsm, '[splitx]');
+  console.log(res)
+
+  const lns = res.split('[splitx]');
+
+
+
+  lns.forEach((l) => {
+    var xpl = l.trim().split('\n');
+
     var title = xpl[0];
     var more = [];
     xpl.forEach((vv, i) => {
@@ -124,7 +142,7 @@ function frame3(inp) {
     var posval = document.createElement('input');
     posval.type = 'range';
     posval.min = 0;
-    posval.style.width="100%"
+    posval.style.width = '100%';
     posval.max = inp.height;
     posval.value = pos;
     xgen(posval);
@@ -143,7 +161,7 @@ function frame3(inp) {
 
     var textsize = document.createElement('input');
     textsize.type = 'range';
-    textsize.style.width="100%"
+    textsize.style.width = '100%';
     textsize.min = 0;
     textsize.max = inp.height;
     textsize.value = inp.textfontsize;
@@ -172,13 +190,10 @@ function frame3(inp) {
         )
         .fill();
 
-        ctx.globalAlpha = 1;
+      ctx.globalAlpha = 1;
 
       for (var x = 0; x <= 2; x++) {
-
-        
-        ctx.font = 'bold '+inp.titlefontsize + 'px '+inp.font;
-       
+        ctx.font = 'bold ' + inp.titlefontsize + 'px ' + inp.font;
 
         ctx.fillStyle = '#000000';
 
@@ -188,23 +203,21 @@ function frame3(inp) {
           parseInt(me.poses[x].value) + inp.width * 0.01
         );
 
-        ctx.font = ' '+inp.titlefontsize + 'px '+inp.font;
-
+        ctx.font = ' ' + inp.titlefontsize + 'px ' + inp.font;
 
         var canvasTxt = window.canvasTxt.default;
-        canvasTxt.font = inp.font
+        canvasTxt.font = inp.font;
         canvasTxt.fontSize = parseInt($(me.textsizes[x]).val());
         canvasTxt.align = 'right';
         canvasTxt.vAlign = 'top';
-        canvasTxt.fontWeight = ''
+        canvasTxt.fontWeight = '';
         canvasTxt.justify = true;
-        canvasTxt.lineHeight = ''
+        canvasTxt.lineHeight = '';
         canvasTxt.drawText(
           ctx,
           $(me.texts[x]).val(),
           inp.width * 0.04,
-          parseInt(me.poses[x].value) +
-            parseInt($(me.textsizes[x]).val()),
+          parseInt(me.poses[x].value) + parseInt($(me.textsizes[x]).val()),
           inp.width - inp.width * 0.08,
           sections
         );
@@ -217,12 +230,10 @@ function frame3(inp) {
 }
 
 function gen12mah(inp) {
-
   inp.img.crossOrigin = 'Anonymous';
   inp.img.setAttribute('crossOrigin', '');
 
-
-  var singlefal = inp.fal
+  var singlefal = inp.fal;
   var davazdah = [];
 
   const chunkSize = 3;
@@ -230,14 +241,14 @@ function gen12mah(inp) {
     const chunk = singlefal.slice(i, i + chunkSize);
 
     var x = frame3({
-      font:inp.font,
+      font: inp.font,
       height: inp.height,
       width: inp.width,
       bg: 'grey',
-      titlefontsize: inp.width*0.08,
-      textfontsize: inp.width*0.04,
+      titlefontsize: inp.width * 0.08,
+      textfontsize: inp.width * 0.04,
       vals: chunk,
-      img:inp.img
+      img: inp.img,
     });
 
     x.gen();
@@ -248,7 +259,7 @@ function gen12mah(inp) {
 }
 
 function gencover(inp) {
-  var title = inp.title
+  var title = inp.title;
   var me = {};
   var canv = document.createElement('canvas');
   canv.style.width = '100%';
@@ -262,12 +273,11 @@ function gencover(inp) {
 
   ctx.globalAlpha = 0.7;
   ctx.fillStyle = 'yellow';
- // ctx.fillRect(0, canv.height * 0.4, canv.width, canv.height * 0.5);
+  // ctx.fillRect(0, canv.height * 0.4, canv.width, canv.height * 0.5);
 
- 
   ctx.fillStyle = 'black';
   var canvasTxt = window.canvasTxt.default;
-  canvasTxt.font = inp.font
+  canvasTxt.font = inp.font;
   canvasTxt.fontSize = parseInt((canv.height * 0.4) / 3);
   canvasTxt.align = 'center';
   canvasTxt.vAlign = 'middle';
@@ -278,14 +288,13 @@ function gencover(inp) {
   canvasTxt.lineHeight = parseInt((canv.height * 0.4) / 3) * 1.5;
 
   ctx.globalAlpha = 1;
-    globstork = {
+  globstork = {
     color: 'white',
-    size: parseInt((canv.height * 0.4) / 6),
+    size: parseInt((canv.height * 0.4) / 10),
   };
 
   setTimeout(() => {
-
- /*   canvasTxt.drawText(
+    /*   canvasTxt.drawText(
       ctx,
       title,
       0,
@@ -294,66 +303,53 @@ function gencover(inp) {
       canv.height * 0.4
     );
 */
-globyy = [];
-globhh = [];
+    globyy = [];
+    globhh = [];
 
-ctx.globalAlpha = 0;
+    ctx.globalAlpha = 0;
+
+    canvasTxt.drawText(ctx, title, 0, 0, canv.width, canv.height);
+
+
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = 'yellow';
+
+    ctx.fillRect(
+      0,
+      globyy[0] - globhh[0],
+      inp.width,
+      /*globyy[globyy.length-1]-globhh[globhh.length-1]*/ 500
+    );
+    globyy = [];
+    globhh = [];
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'black';
+    canvasTxt.drawText(ctx, title, 0, 0, canv.width, canv.height);
+
+    globyy = [];
+    globhh = [];
+
+    globstork = false;
+    /**/
+
+    ctx.fillStyle = 'white';
+    var canvasTxt2 = window.canvasTxt.default;
+    canvasTxt2.font = inp.font2;
+    canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 6);
+    canvasTxt2.align = 'center';
+    canvasTxt2.vAlign = 'bottom';
+    canvasTxt2.justify = true;
 
     canvasTxt.drawText(
       ctx,
-      title,
+      'anjelaworld@',
       0,
       0,
       canv.width,
-      canv.height
-    );
-    console.log(globyy)
-    console.log(globhh)
-
-
-  ctx.globalAlpha = 0.7;
-  ctx.fillStyle = 'yellow';
-
- ctx.fillRect(0, globyy[0]-globhh[0],inp.width,/*globyy[globyy.length-1]-globhh[globhh.length-1]*/ 500 );
-  globyy = [];
-  globhh = [];
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = 'black';
-  canvasTxt.drawText(
-      ctx,
-      title,
-      0,
-      0,
-      canv.width,
-      canv.height
+      canv.height - canv.height * 0.05
     );
 
-  globyy = [];
-  globhh = [];
-
-  globstork = false;
-/**/
-
-  ctx.fillStyle = 'white';
-  var canvasTxt2 = window.canvasTxt.default;
-  canvasTxt2.font = inp.font2
-  canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 6);
-  canvasTxt2.align = 'center';
-  canvasTxt2.vAlign = 'bottom';
-  canvasTxt2.justify = true;
-
-  canvasTxt.drawText(
-      ctx,
-      "anjelaworld@",
-      0,
-      0,
-      canv.width,
-      canv.height-canv.height*0.05
-    );
-
-/**/
-
-    
+    /**/
   }, 100);
 
   me.elem = canv;
@@ -364,8 +360,6 @@ function render(inp) {
   var startframe = -1;
 
   var canv = document.createElement('canvas');
-
-
 
   canv.height = inp.width;
   canv.width = inp.height;
@@ -395,7 +389,6 @@ function render(inp) {
       if (!beginfal) {
         counter = 1;
         beginfal = true;
-      
       }
 
       if (seconds % 15 == 0) {
@@ -403,7 +396,6 @@ function render(inp) {
           flipflop = true;
 
           counter++;
-        
         }
       } else {
         if (flipflop) {
@@ -422,8 +414,9 @@ function render(inp) {
     }
   };
 
-  setTimeout(() => { requestAnimationFrame(d)}, 100);
- 
+  setTimeout(() => {
+    requestAnimationFrame(d);
+  }, 100);
 
   var dlx = $('<div>...</div>');
   var exportVid = function (blob) {
@@ -431,14 +424,14 @@ function render(inp) {
     vid.src = URL.createObjectURL(blob);
     vid.controls = true;
     const a = document.createElement('a');
-    a.download = 'myvid.'+$("#ft").val();
+    a.download = 'myvid.' + $('#ft').val();
     a.href = vid.src;
     a.textContent = 'download';
     dlx.append($(a));
   };
 
   /*audio*/
-//  inp.audio.crossOrigin = 'anonymous';
+  //  inp.audio.crossOrigin = 'anonymous';
 
   var actx = new AudioContext();
   var dest = actx.createMediaStreamDestination();
@@ -449,39 +442,44 @@ function render(inp) {
   inp.audioelem.play();
   /**/
   var stream = canv.captureStream();
-  stream.addTrack(audioTrack)
-  var rec = new MediaRecorder(stream,{
+  stream.addTrack(audioTrack);
+  var rec = new MediaRecorder(stream, {
     mimeType: 'video/webm;codecs=h264',
-    audioBitsPerSecond: parseInt($("#abr").val()), // 128 kbit/s
-    videoBitsPerSecond: parseInt($("#vbr").val()), // 2 Mbit/s
+    audioBitsPerSecond: parseInt($('#abr').val()), // 128 kbit/s
+    videoBitsPerSecond: parseInt($('#vbr').val()), // 2 Mbit/s
   });
 
   const chunks = [];
   rec.ondataavailable = (e) => {
-
-    chunks.push(e.data)
+    chunks.push(e.data);
   };
 
   rec.onstop = (e) => {
-    
-     exportVid(new Blob(chunks, { type: 'video/'+$("#ft").val() }))};
+    exportVid(new Blob(chunks, { type: 'video/' + $('#ft').val() }));
+  };
 
-  setTimeout(() => {  rec.start();}, 100);
+  setTimeout(() => {
+    rec.start();
+  }, 100);
 
-  setTimeout(() => { rec.stop();inp.audioelem.pause(); } ,/* 59000 */ 59000);
+  setTimeout(() => {
+    rec.stop();
+    inp.audioelem.pause();
+  }, /* 59000 */ 59000);
 
   return dlx;
 }
 
 function loadfont(fname) {
-   $(document.body).append('<div style="font-family:'+fname+';visibility:hidden">فونت</div>')
+  $(document.body).append(
+    '<div style="font-family:' + fname + ';visibility:hidden">فونت</div>'
+  );
 }
 
 function fal(inp) {
-
- loadfont(inp.titlefont);
- loadfont(inp.textfont);
- loadfont(inp.tagfont)
+  loadfont(inp.titlefont);
+  loadfont(inp.textfont);
+  loadfont(inp.tagfont);
 
   var thisfal = $(
     '<div style="overflow:scroll;height:350px; white-space: nowrap;"></div>'
@@ -491,30 +489,38 @@ function fal(inp) {
     '<div style="display:inline-block;margin-left:2rem;width:300px;vertical-align: top;"></div>'
   );
 
-  var aucont = $('<div style="display:inline-block;margin-left:2rem;width:300px;vertical-align: top;"></div>');
+  var aucont = $(
+    '<div style="display:inline-block;margin-left:2rem;width:300px;vertical-align: top;"></div>'
+  );
 
   aucont.append(inp.audioelem);
   thisfal.append(aucont);
 
   thisfal.append(covccont);
 
-
-
-
   var singlefal = gen(inp.text);
   var faltitle = singlefal[0];
 
-
-
-    covccont.append(
-      gencover({font2:inp.tagfont,font:inp.titlefont,title:faltitle.title + '\n' + faltitle.text.join('\n')+"",width:inp.width,height:inp.height,img:inp.img}).elem
-    );
-
-
+  covccont.append(
+    gencover({
+      font2: inp.tagfont,
+      font: inp.titlefont,
+      title: faltitle.title + '\n' + faltitle.text.join('\n') + '',
+      width: inp.width,
+      height: inp.height,
+      img: inp.img,
+    }).elem
+  );
 
   singlefal.splice(0, 1);
 
-  gen12mah({font:inp.textfont,fal:singlefal,width:inp.width,height:inp.height,img:inp.img}).forEach((e) => {
+  gen12mah({
+    font: inp.textfont,
+    fal: singlefal,
+    width: inp.width,
+    height: inp.height,
+    img: inp.img,
+  }).forEach((e) => {
     e.elem.style.width = '100%';
 
     var ccont = $(
@@ -524,7 +530,7 @@ function fal(inp) {
     ccont.append($(e.elem));
     var controler = $('<div></div>');
 
-   // controler.hide();
+    // controler.hide();
 
     e.titles.forEach((t, i) => {
       controler.append($(e.textsizes[i]));
@@ -546,9 +552,16 @@ function fal(inp) {
 
   thisfal.append(
     $('<button>gen</button>').click(() => {
-      thisfal.append(render({audioelem:inp.audioelem,allframes:alfalsframe,width:inp.width,height:inp.height}));
+      thisfal.append(
+        render({
+          audioelem: inp.audioelem,
+          allframes: alfalsframe,
+          width: inp.width,
+          height: inp.height,
+        })
+      );
     })
   );
 
- return thisfal
+  return thisfal;
 }

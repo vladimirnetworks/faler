@@ -51,7 +51,7 @@
     <script src="funcs.js"></script>
     <script>
       filer((text, image, audio) => {
-        console.log(URL.createObjectURL(image));
+
 
         var myImage = new Image();
         myImage.src = URL.createObjectURL(image);
@@ -68,7 +68,7 @@
         var reader = new FileReader();
         reader.readAsText(text, 'UTF-8');
         reader.onload = function (evt) {
-          console.log(evt.target.result);
+
 
           setTimeout(() => {
             var f = fal({
