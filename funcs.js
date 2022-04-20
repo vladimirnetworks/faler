@@ -84,12 +84,10 @@ function gen(val) {
   val = val.replaceAll('\r', '');
   var vals = [];
   var xval = val.trim();
-  let res = xval.replace(/^\s+/gsm, '[splitx]');
-  console.log(res)
+  let res = xval.replace(/^\s+/gms, '[splitx]');
+  console.log(res);
 
   const lns = res.split('[splitx]');
-
-
 
   lns.forEach((l) => {
     var xpl = l.trim().split('\n');
@@ -260,7 +258,12 @@ function gen12mah(inp) {
 
 function gencover(inp) {
   var title = inp.title;
+
   var me = {};
+  me.title = $('<textarea style="width:100%">');
+  me.title.val(title)
+  me.colorpicker = $('<input type="color" value="#FFFF00">');
+
   var canv = document.createElement('canvas');
   canv.style.width = '100%';
   canv.style.backgroundColor = 'green';
@@ -269,32 +272,49 @@ function gencover(inp) {
   canv.style.direction = 'rtl';
   var ctx = canv.getContext('2d');
 
-  ctx.drawImage(inp.img, 0, 0, inp.width, inp.height);
-
   ctx.globalAlpha = 0.7;
   ctx.fillStyle = 'yellow';
-  // ctx.fillRect(0, canv.height * 0.4, canv.width, canv.height * 0.5);
 
-  ctx.fillStyle = 'black';
-  var canvasTxt = window.canvasTxt.default;
-  canvasTxt.font = inp.font;
-  canvasTxt.fontSize = parseInt((canv.height * 0.4) / 3);
-  canvasTxt.align = 'center';
-  canvasTxt.vAlign = 'middle';
-  canvasTxt.justify = true;
-  canvasTxt.fontWeight = '';
-  canvasTxt.strokeStyle = 'red';
+  me.colorpicker.change(function () {
+    ctx.fillStyle = me.colorpicker.val();
+    me.gen();
+  });
 
-  canvasTxt.lineHeight = parseInt((canv.height * 0.4) / 3) * 1.5;
+  me.title.on('keyup',function () {
+   
+    me.gen();
+  });
 
-  ctx.globalAlpha = 1;
-  globstork = {
-    color: 'white',
-    size: parseInt((canv.height * 0.4) / 10),
-  };
+  globyy = [];
+  globhh = [];
 
-  setTimeout(() => {
-    /*   canvasTxt.drawText(
+  me.gen = function () {
+    globyy = [];
+    globhh = [];
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, inp.width, inp.height);
+    ctx.drawImage(inp.img, 0, 0, inp.width, inp.height);
+    ctx.fillStyle = 'black';
+    var canvasTxt = window.canvasTxt.default;
+    canvasTxt.font = inp.font;
+    canvasTxt.fontSize = parseInt((canv.height * 0.4) / 3);
+    canvasTxt.align = 'center';
+    canvasTxt.vAlign = 'middle';
+    canvasTxt.justify = true;
+    canvasTxt.fontWeight = '';
+    canvasTxt.strokeStyle = 'red';
+
+    canvasTxt.lineHeight = parseInt((canv.height * 0.4) / 3) * 1.5;
+
+    ctx.globalAlpha = 1;
+    globstork = {
+      color: 'white',
+      size: parseInt((canv.height * 0.4) / 10),
+    };
+
+    setTimeout(() => {
+      /*   canvasTxt.drawText(
       ctx,
       title,
       0,
@@ -303,54 +323,54 @@ function gencover(inp) {
       canv.height * 0.4
     );
 */
-    globyy = [];
-    globhh = [];
 
-    ctx.globalAlpha = 0;
+      ctx.globalAlpha = 0;
 
-    canvasTxt.drawText(ctx, title, 0, 0, canv.width, canv.height);
+      canvasTxt.drawText(ctx, me.title.val(), 0, 0, canv.width, canv.height);
 
+      ctx.globalAlpha = 0.7;
+      //ctx.fillStyle = 'yellow';
+      ctx.fillStyle = me.colorpicker.val();
 
-    ctx.globalAlpha = 0.7;
-    ctx.fillStyle = 'yellow';
+      ctx.fillRect(
+        0,
+        globyy[0] - globhh[0],
+        inp.width,
+        /*globyy[globyy.length-1]-globhh[globhh.length-1]*/ 500
+      );
+      globyy = [];
+      globhh = [];
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = 'black';
+      canvasTxt.drawText(ctx, me.title.val(), 0, 0, canv.width, canv.height);
 
-    ctx.fillRect(
-      0,
-      globyy[0] - globhh[0],
-      inp.width,
-      /*globyy[globyy.length-1]-globhh[globhh.length-1]*/ 500
-    );
-    globyy = [];
-    globhh = [];
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = 'black';
-    canvasTxt.drawText(ctx, title, 0, 0, canv.width, canv.height);
+      globyy = [];
+      globhh = [];
 
-    globyy = [];
-    globhh = [];
+      globstork = false;
+      /**/
 
-    globstork = false;
-    /**/
+      ctx.fillStyle = 'white';
+      var canvasTxt2 = window.canvasTxt.default;
+      canvasTxt2.font = inp.font2;
+      canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 6);
+      canvasTxt2.align = 'center';
+      canvasTxt2.vAlign = 'bottom';
+      canvasTxt2.justify = true;
 
-    ctx.fillStyle = 'white';
-    var canvasTxt2 = window.canvasTxt.default;
-    canvasTxt2.font = inp.font2;
-    canvasTxt2.fontSize = parseInt((canv.height * 0.4) / 6);
-    canvasTxt2.align = 'center';
-    canvasTxt2.vAlign = 'bottom';
-    canvasTxt2.justify = true;
+      canvasTxt.drawText(
+        ctx,
+        'anjelaworld@',
+        0,
+        0,
+        canv.width,
+        canv.height - canv.height * 0.05
+      );
 
-    canvasTxt.drawText(
-      ctx,
-      'anjelaworld@',
-      0,
-      0,
-      canv.width,
-      canv.height - canv.height * 0.05
-    );
-
-    /**/
-  }, 100);
+      /**/
+    }, 100);
+  };
+  // ctx.fillRect(0, canv.height * 0.4, canv.width, canv.height * 0.5);
 
   me.elem = canv;
   return me;
@@ -501,16 +521,23 @@ function fal(inp) {
   var singlefal = gen(inp.text);
   var faltitle = singlefal[0];
 
-  covccont.append(
-    gencover({
-      font2: inp.tagfont,
-      font: inp.titlefont,
-      title: faltitle.title + '\n' + faltitle.text.join('\n') + '',
-      width: inp.width,
-      height: inp.height,
-      img: inp.img,
-    }).elem
-  );
+  var gcov = gencover({
+    font2: inp.tagfont,
+    font: inp.titlefont,
+    title: faltitle.title + '\n' + faltitle.text.join('\n') + '',
+    width: inp.width,
+    height: inp.height,
+    img: inp.img,
+  });
+
+  gcov.gen();
+  covccont.append(gcov.elem);
+  var covconto = $('<div></div>');
+  covconto.append(gcov.colorpicker);
+  covconto.append('<br>');
+  covconto.append(gcov.title);
+
+  covccont.append(covconto);
 
   singlefal.splice(0, 1);
 
