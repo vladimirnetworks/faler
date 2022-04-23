@@ -470,7 +470,8 @@ function render(inp) {
   var stream = canv.captureStream();
   stream.addTrack(audioTrack);
   var rec = new MediaRecorder(stream, {
-    mimeType: 'video/webm;codecs=h264',
+   // mimeType: 'video/webm;codecs=h264',
+    mimeType: 'video/'+$('#ft').val(),
     audioBitsPerSecond: parseInt($('#abr').val()), // 128 kbit/s
     videoBitsPerSecond: parseInt($('#vbr').val()), // 2 Mbit/s
   });
@@ -491,7 +492,7 @@ function render(inp) {
   setTimeout(() => {
     rec.stop();
     inp.audioelem.pause();
-  }, /* 59000 */ 59000);
+  }, /* 59000 */ 2000);
 
   return dlx;
 }
