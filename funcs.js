@@ -492,7 +492,7 @@ function render(inp) {
   setTimeout(() => {
     rec.stop();
     inp.audioelem.pause();
-  }, /* 59000 */ 59000);
+  }, /* 59000 */ parseInt($("#maxt").val()));
 
   return dlx;
 }
