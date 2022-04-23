@@ -36,3 +36,9 @@ body {
 
 
 }
+
+textarea {
+  direction:rtl;
+  text-align:right;
+  padding:1rem
+}

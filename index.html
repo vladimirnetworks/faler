@@ -50,6 +50,8 @@
 
     <script src="funcs.js"></script>
     <script>
+
+    var timx = 1000;
       filer((text, image, audio) => {
 
 
@@ -83,7 +85,8 @@
             });
 
             $('#fals').append(f);
-          }, 1000);
+          }, timx);
+          timx = timx+500;
         };
       });
     </script>

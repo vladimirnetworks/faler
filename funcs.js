@@ -263,6 +263,7 @@ function gencover(inp) {
   me.title = $('<textarea style="width:100%">');
   me.title.val(title)
   me.colorpicker = $('<input type="color" value="#FFFF00">');
+  me.colorpicker2 = $('<input type="color" value="#000000">');
 
   var canv = document.createElement('canvas');
   canv.style.width = '100%';
@@ -277,6 +278,11 @@ function gencover(inp) {
 
   me.colorpicker.change(function () {
     ctx.fillStyle = me.colorpicker.val();
+    me.gen();
+  });
+
+  me.colorpicker2.change(function () {
+    ctx.fillStyle = me.colorpicker2.val();
     me.gen();
   });
 
@@ -341,7 +347,7 @@ function gencover(inp) {
       globyy = [];
       globhh = [];
       ctx.globalAlpha = 1;
-      ctx.fillStyle = 'black';
+      ctx.fillStyle = me.colorpicker2.val();
       canvasTxt.drawText(ctx, me.title.val(), 0, 0, canv.width, canv.height);
 
       globyy = [];
@@ -534,6 +540,7 @@ function fal(inp) {
   covccont.append(gcov.elem);
   var covconto = $('<div></div>');
   covconto.append(gcov.colorpicker);
+  covconto.append(gcov.colorpicker2);
   covconto.append('<br>');
   covconto.append(gcov.title);
 
