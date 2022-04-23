@@ -264,6 +264,7 @@ function gencover(inp) {
   me.title.val(title)
   me.colorpicker = $('<input type="color" value="#FFFF00">');
   me.colorpicker2 = $('<input type="color" value="#000000">');
+  me.colorpicker3 = $('<input type="color" value="#FFFFFF">');
 
   var canv = document.createElement('canvas');
   canv.style.width = '100%';
@@ -283,6 +284,11 @@ function gencover(inp) {
 
   me.colorpicker2.change(function () {
     ctx.fillStyle = me.colorpicker2.val();
+    me.gen();
+  });
+
+  me.colorpicker3.change(function () {
+    ctx.fillStyle = me.colorpicker3.val();
     me.gen();
   });
 
@@ -315,7 +321,7 @@ function gencover(inp) {
 
     ctx.globalAlpha = 1;
     globstork = {
-      color: 'white',
+      color: me.colorpicker3.val(),
       size: parseInt((canv.height * 0.4) / 10),
     };
 
@@ -542,6 +548,7 @@ function fal(inp) {
   var covconto = $('<div></div>');
   covconto.append(gcov.colorpicker);
   covconto.append(gcov.colorpicker2);
+  covconto.append(gcov.colorpicker3);
   covconto.append('<br>');
   covconto.append(gcov.title);
 
