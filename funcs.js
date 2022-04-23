@@ -492,7 +492,7 @@ function render(inp) {
   setTimeout(() => {
     rec.stop();
     inp.audioelem.pause();
-  }, /* 59000 */ 2000);
+  }, /* 59000 */ 59000);
 
   return dlx;
 }
